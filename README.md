@@ -1,0 +1,2 @@
+# maj-deduction
+ Foredrag tlnt 
