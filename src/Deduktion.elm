@@ -2,7 +2,7 @@ module Deduktion exposing (..)
 
 import Browser
 import Debug exposing (toString)
-import Element exposing (Element, paddingEach, alignBottom, alignLeft, alignRight, alignTop, centerX, centerY, column, el, explain, fill, fillPortion, height, none, padding, rgb, row, spacing, text, width)
+import Element exposing (Element, alignBottom, alignLeft, alignRight, alignTop, centerX, centerY, column, el, explain, fill, fillPortion, height, none, padding, paddingEach, rgb, row, spacing, text, width)
 import Element.Background as Background
 import Element.Border as Border
 import Element.Font as Font
@@ -275,8 +275,7 @@ reglerne =
         , centerY
         , spacing 64
         ]
-        [ text "hej"
-        , drawMeta implicationMeta
+        [ drawMeta implicationMeta
         , drawMeta andMeta
         , drawMeta orMeta
 

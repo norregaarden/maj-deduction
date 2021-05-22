@@ -8,17 +8,20 @@ import String exposing (fromInt)
 binaryConnective : String -> Int -> Int -> Int -> Int -> Element msg
 binaryConnective navn nul en to tre =
     column [ spacing 16, width fill ]
-        [ row [ width fill, spacing 16 ]
-            [ navn |> K.inline |> K.print |> text, text "0", text "1" ]
-        , row [ width fill, spacing 16 ]
-            [ text "0"
-            , nul |> fromInt |> text
-            , en |> fromInt |> text
+        [ row [ width fill, spacing 16, width fill ]
+            [ navn |> K.inline |> K.print |> text |> el [ alignLeft ]
+            , "0" |> K.inline |> K.print |> text |> el [ centerX ]
+            , "1" |> K.inline |> K.print |> text |> el [ alignRight ]
             ]
-        , row [ width fill, spacing 16 ]
-            [ text "1"
-            , to |> fromInt |> text
-            , tre |> fromInt |> text
+        , row [ width fill, spacing 16, width fill ]
+            [ "0" |> K.inline |> K.print |> text |> el [ alignLeft ]
+            , nul |> fromInt |> K.inline |> K.print |> text |> el [ centerX ]
+            , en |> fromInt |> K.inline |> K.print |> text |> el [ alignRight ]
+            ]
+        , row [ width fill, spacing 16, width fill ]
+            [ "1" |> K.inline |> K.print |> text |> el [ alignLeft ]
+            , to |> fromInt |> K.inline |> K.print |> text |> el [ centerX ]
+            , tre |> fromInt |> K.inline |> K.print |> text |> el [ alignRight ]
             ]
         ]
 

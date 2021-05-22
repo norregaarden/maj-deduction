@@ -3,6 +3,7 @@ module Table exposing (table)
 import Element exposing (Element, centerX, column, el, fill, fillPortion, height, none, padding, rgb, row, spacing, text, width)
 import Element.Background as Background
 import Element.Font as Font
+import Katex exposing (inline, print)
 
 
 table =
@@ -10,9 +11,9 @@ table =
         [ tableColumn F F S S "P"
         , tableColumn F S F S "Q"
         , verticalSeparator
-        , tableColumn F F F F "c0" --0
-        , tableColumn S F F F "nand" --1
-        , tableColumn F S F F "?" --2
+        , tableColumn F F F F "0" --0
+        , tableColumn S F F F "\\neg \\wedge" --1
+        , tableColumn F S F F "\\neg \\wedge" --2
         , tableColumn S S F F "?" --3
         , tableColumn F F S F "?" --4
         , tableColumn S F S F "?" --5
@@ -25,7 +26,7 @@ table =
         , tableColumn F F S S "?" --12
         , tableColumn S F S S "?" --13
         , tableColumn F S S S "?" --14
-        , tableColumn S S S S "c1" --15
+        , tableColumn S S S S "1" --15
         ]
 
 
@@ -53,6 +54,12 @@ entenEllerElement ee =
     text (entenEllerString ee) |> el [ centerX ]
 
 
+
+-- tableColumn : EntenEller -> EntenEller -> EntenEller -> EntenEller -> String -> Element msg
+-- tableColumn t1 t2 t3 t4 head =
+--     column [ spacing 8, centerX, width (fillPortion 1) ] <| el [ Font.bold ] (text head) :: List.map entenEllerElement [ t1, t2, t3, t4 ]
+
+
 tableColumn : EntenEller -> EntenEller -> EntenEller -> EntenEller -> String -> Element msg
-tableColumn t1 t2 t3 t4 head =
-    column [ spacing 8, centerX, width (fillPortion 1) ] <| el [ Font.bold ] (text head) :: List.map entenEllerElement [ t1, t2, t3, t4 ]
+tableColumn t1 t2 t3 t4 tex =
+    column [ spacing 8, centerX, width (fillPortion 1) ] <| el [ Font.bold ] (tex |> inline |> print |> text) :: List.map entenEllerElement [ t1, t2, t3, t4 ]

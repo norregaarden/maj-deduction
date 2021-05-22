@@ -2,7 +2,7 @@ module Intutionistisk exposing (..)
 
 import Browser
 import Debug exposing (toString)
-import Element exposing (Element, alignBottom, alignLeft, alignRight, alignTop, centerX, centerY, column, el, explain, fill, fillPortion, height, none, padding, rgb, rgb255, row, shrink, spacing, text, width)
+import Element exposing (Element, alignBottom, alignLeft, alignRight, alignTop, centerX, centerY, column, el, explain, fill, fillPortion, height, none, padding, paddingXY, rgb, rgb255, row, shrink, spacing, text, width)
 import Element.Background as Background
 import Element.Border as Border
 import Element.Font as Font
@@ -116,16 +116,22 @@ introImplication : Variable -> Prop -> JudgmentTrue -> JudgmentTrue
 introImplication var prop jud =
     { prop = New Implies prop jud.prop, evidence = Hypothetical var prop jud }
 
+
 elimImplication : JudgmentTrue -> JudgmentTrue -> JudgmentTrue
 elimImplication prem impl =
-    case impl.prop of 
-        New Implies a b -> JudgmentTrue b (Inferred [prem, impl])
+    case impl.prop of
+        New Implies a b ->
+            JudgmentTrue b (Inferred [ prem, impl ])
 
-        _ -> Debug.todo "Error elimImplication"
+        _ ->
+            Debug.todo "Error elimImplication"
+
 
 elimAbsurd : JudgmentTrue -> Prop -> JudgmentTrue
 elimAbsurd absurd prop =
-    JudgmentTrue prop (Inferred [absurd])
+    JudgmentTrue prop (Inferred [ absurd ])
+
+
 
 --a_and_b : JudgmentTrue
 --a_and_b =
@@ -134,7 +140,6 @@ elimAbsurd absurd prop =
 
 b_and_a_from_a_and_b : JudgmentTrue -> JudgmentTrue
 b_and_a_from_a_and_b a_and_b =
-    --JudgmentTrue (New And (Atom B) (Atom A)) <|
     introAnd (a_and_b |> elimAndRight) (a_and_b |> elimAndLeft)
 
 
@@ -145,22 +150,30 @@ b_or_a_from_a_and_b a_and_b =
 
 transitive_implication : Prop -> Prop -> Prop -> JudgmentTrue
 transitive_implication p q r =
-    let -- and we assume p in hypothetical, extra hardcode for now.
-        given1 = assumeTrue (New Implies p q)
-        given2 = assumeTrue (New Implies q r) 
+    let
+        -- and we assume p in hypothetical, extra hardcode for now.
+        given1 =
+            assumeTrue (New Implies p q)
+
+        given2 =
+            assumeTrue (New Implies q r)
     in
     introImplication H p <| elimImplication (elimImplication (assumeTrue p) given1) given2
-    
-    --assumeTrue (New Implies p q)
-    --assumeTrue (New Implies q r)
 
+
+
+--assumeTrue (New Implies p q)
+--assumeTrue (New Implies q r)
 --- VIEW ---
 
 
 drawExample =
     column [ spacing 64 ]
         [ text "konjunktion kommuterer"
-        , drawJudgment <| b_and_a_from_a_and_b <| assumeTrue (New And (Atom A) (Atom B))
+        , row [ spacing 64, paddingXY 32 0 ]
+            [ drawJudgment <| b_and_a_from_a_and_b <| assumeTrue (New And (Atom A) (Atom B))
+            , text "fra (A og B) kan vi bevise (B og A)"
+            ]
         , drawJudgment <| b_and_a_from_a_and_b <| assumeTrue (New And (Atom D) (Atom C))
         , text "fra konjunktion følger disjunktion"
         , drawJudgment <| b_or_a_from_a_and_b <| assumeTrue (New And (Atom A) (Atom B))
@@ -214,6 +227,7 @@ drawHypothesis hyp =
 
                 H ->
                     "h"
+
                 _ ->
                     Debug.todo "Error drawHypothesis"
             )
@@ -253,7 +267,8 @@ atomString atom =
         D ->
             "D"
 
-        Absurdity -> "absurd"
+        Absurdity ->
+            "absurd"
 
         _ ->
             Debug.todo "Error"
